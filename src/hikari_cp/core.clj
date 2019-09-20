@@ -72,6 +72,9 @@
 (s/def ::idle-timeout
   (s/and integer? gte-0?))
 
+(s/def ::initialization-fail-timeout
+  integer?)
+
 (s/def ::max-lifetime
   (s/and integer? gte-0?))
 
@@ -101,6 +104,7 @@
                           ::register-mbeans
                           ::validation-timeout]
                  :opt-un [::connection-timeout
+                          ::initialization-fail-timeout
                           ::transaction-isolation
                           ::leak-detection-threshold])
          ;; Make sure that if the user provides the class
@@ -176,6 +180,7 @@
    :driver-class-name
    :health-check-registry
    :idle-timeout
+   :initialization-fail-timeout
    :jdbc-url
    :leak-detection-threshold
    :max-lifetime
@@ -206,6 +211,7 @@
                 connection-timeout
                 validation-timeout
                 idle-timeout
+                initialization-fail-timeout
                 max-lifetime
                 maximum-pool-size
                 minimum-idle
@@ -246,6 +252,7 @@
     (when connection-test-query (.setConnectionTestQuery config connection-test-query))
     (when metric-registry (.setMetricRegistry config metric-registry))
     (when health-check-registry (.setHealthCheckRegistry config health-check-registry))
+    (when initialization-fail-timeout (.setInitializationFailTimeout config initialization-fail-timeout))
     (when metrics-tracker-factory (.setMetricsTrackerFactory config metrics-tracker-factory))
     (when leak-detection-threshold
       (.setLeakDetectionThreshold config ^Long leak-detection-threshold))
